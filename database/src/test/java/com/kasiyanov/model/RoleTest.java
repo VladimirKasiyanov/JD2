@@ -4,13 +4,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class RoleTest {
     private static final SessionFactory FACTORY = new Configuration().configure().buildSessionFactory();
@@ -24,8 +23,7 @@ public class RoleTest {
     public void clean() {
         try (Session session = FACTORY.openSession()) {
             session.beginTransaction();
-            int result = session.createQuery("delete from Role").executeUpdate();
-            System.out.println(result);
+            session.createQuery("delete from Role").executeUpdate();
             session.getTransaction().commit();
         }
     }
@@ -38,7 +36,7 @@ public class RoleTest {
                     .build();
             session.save(courier);
             Serializable id = session.save(courier);
-            assertNotNull(id);
+            Assert.assertNotNull(id);
         }
     }
 
@@ -50,19 +48,24 @@ public class RoleTest {
                     .build();
             session.save(courier);
             Serializable savedId = session.save(courier);
-            assertNotNull(savedId);
+            Assert.assertNotNull(savedId);
+            session.evict(courier);
             Role saveRole = session.find(Role.class, savedId);
-            assertNotNull(saveRole);
+            Assert.assertNotNull(saveRole);
         }
     }
 
     @Test
     public void checkGetAll() {
         try (Session session = FACTORY.openSession()) {
+            Role courier = Role.builder()
+                    .name("курьер")
+                    .build();
+            session.save(courier);
+
             List<Role> list =
                     session.createQuery("select r from Role r", Role.class).list();
-            System.out.println(list.size());
+            Assert.assertEquals(1, list.size());
         }
     }
-
 }

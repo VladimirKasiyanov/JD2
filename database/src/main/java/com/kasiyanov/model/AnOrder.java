@@ -28,13 +28,13 @@ import java.time.Instant;
 @Builder
 @Entity
 @Table(name = "anorder", schema = "store")
-public class AnOrder {
+public class AnOrder implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "number", unique = true, nullable = false)
+    @Column(name = "number", nullable = false)
     private Integer number;
 
     @Column(name = "order_date", nullable = false)

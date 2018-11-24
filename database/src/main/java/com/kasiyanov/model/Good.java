@@ -28,7 +28,7 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "good", schema = "store")
-public class Good {
+public class Good implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

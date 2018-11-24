@@ -4,13 +4,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class BuyerTest {
 
@@ -25,8 +24,7 @@ public class BuyerTest {
     public void clean() {
         try (Session session = FACTORY.openSession()) {
             session.beginTransaction();
-            int result = session.createQuery("delete from Buyer").executeUpdate();
-            System.out.println(result);
+            session.createQuery("delete from Buyer").executeUpdate();
             session.getTransaction().commit();
         }
     }
@@ -44,7 +42,7 @@ public class BuyerTest {
                     123,
                     45);
             Serializable id = session.save(buyer);
-            assertNotNull(id);
+            Assert.assertNotNull(id);
         }
     }
 
@@ -61,19 +59,30 @@ public class BuyerTest {
                     123,
                     45);
             Serializable savedId = session.save(buyer);
-            assertNotNull(savedId);
+            Assert.assertNotNull(savedId);
+            session.evict(buyer);
             Buyer saveBuyer = session.find(Buyer.class, savedId);
-            assertNotNull(saveBuyer);
+            Assert.assertNotNull(saveBuyer);
         }
     }
 
     @Test
     public void checkGetAll() {
         try (Session session = FACTORY.openSession()) {
+            Buyer buyer = new Buyer("Stas",
+                    "Stasov",
+                    "Stas",
+                    "stas",
+                    "stas@mail.ru",
+                    "375-29-116-45-67",
+                    "Независимости",
+                    123,
+                    45);
+            session.save(buyer);
+
             List<Buyer> list =
                     session.createQuery("select b from Buyer b", Buyer.class).list();
-            System.out.println(list.size());
+            Assert.assertEquals(1, list.size());
         }
     }
-
 }

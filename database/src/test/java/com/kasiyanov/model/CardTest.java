@@ -4,13 +4,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class CardTest {
 
@@ -25,8 +24,7 @@ public class CardTest {
     public void clean() {
         try (Session session = FACTORY.openSession()) {
             session.beginTransaction();
-            int result = session.createQuery("delete from Card").executeUpdate();
-            System.out.println(result);
+            session.createQuery("delete from Card").executeUpdate();
             session.getTransaction().commit();
         }
     }
@@ -41,7 +39,7 @@ public class CardTest {
                     .cv("479")
                     .build();
             Serializable id = session.save(petr);
-            assertNotNull(id);
+            Assert.assertNotNull(id);
         }
     }
 
@@ -55,18 +53,27 @@ public class CardTest {
                     .cv("479")
                     .build();
             Serializable savedId = session.save(petr);
-            assertNotNull(savedId);
+            Assert.assertNotNull(savedId);
+            session.evict(petr);
             Card saveCard = session.find(Card.class, savedId);
-            assertNotNull(saveCard);
+            Assert.assertNotNull(saveCard);
         }
     }
 
     @Test
     public void checkGetAll() {
         try (Session session = FACTORY.openSession()) {
+            Card petr = Card.builder()
+                    .number("1111222233334444")
+                    .name("PETR PETROV")
+                    .date("03/21")
+                    .cv("479")
+                    .build();
+            session.save(petr);
+
             List<Card> list =
                     session.createQuery("select c from Card c", Card.class).list();
-            System.out.println(list.size());
+            Assert.assertEquals(1, list.size());
         }
     }
 }

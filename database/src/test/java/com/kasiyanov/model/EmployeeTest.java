@@ -4,13 +4,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class EmployeeTest {
     private static final SessionFactory FACTORY = new Configuration().configure().buildSessionFactory();
@@ -24,8 +23,7 @@ public class EmployeeTest {
     public void clean() {
         try (Session session = FACTORY.openSession()) {
             session.beginTransaction();
-            int result = session.createQuery("delete from Employee ").executeUpdate();
-            System.out.println(result);
+            session.createQuery("delete from Employee ").executeUpdate();
             session.getTransaction().commit();
         }
     }
@@ -41,7 +39,7 @@ public class EmployeeTest {
                     "375-29-329-45-67",
                     800.15);
             Serializable id = session.save(employee);
-            assertNotNull(id);
+            Assert.assertNotNull(id);
         }
     }
 
@@ -56,19 +54,28 @@ public class EmployeeTest {
                     "375-29-329-45-67",
                     800.15);
             Serializable savedId = session.save(employee);
-            assertNotNull(savedId);
+            Assert.assertNotNull(savedId);
+            session.evict(employee);
             Employee saveEmployee = session.find(Employee.class, savedId);
-            assertNotNull(saveEmployee);
+            Assert.assertNotNull(saveEmployee);
         }
     }
 
     @Test
     public void checkGetAll() {
         try (Session session = FACTORY.openSession()) {
+            Employee employee = new Employee("Nikolay",
+                    "Nikolaev",
+                    "Nikolay",
+                    "nikolay",
+                    "nikolay@tut.by",
+                    "375-29-329-45-67",
+                    800.15);
+            session.save(employee);
+
             List<Employee> list =
                     session.createQuery("select e from Employee e", Employee.class).list();
-            System.out.println(list.size());
+            Assert.assertEquals(1, list.size());
         }
     }
-
 }

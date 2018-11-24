@@ -22,7 +22,7 @@ import javax.persistence.JoinColumn;
 @Builder
 @Entity
 @Table(name = "card", schema = "store")
-public class Card {
+public class Card implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

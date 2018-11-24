@@ -24,7 +24,7 @@ import javax.persistence.JoinColumn;
 @Entity
 @Table(name = "employee", schema = "store")
 @PrimaryKeyJoinColumn(name = "person_id")
-public class Employee extends Person {
+public class Employee extends Person implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

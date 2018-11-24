@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "person", schema = "store")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Person {
+public abstract class Person implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

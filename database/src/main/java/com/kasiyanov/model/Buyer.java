@@ -19,14 +19,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@ToString(exclude = "anOrder")
+@ToString(exclude = {"card", "anOrder"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "buyer", schema = "store")
 @PrimaryKeyJoinColumn(name = "person_id")
-public class Buyer extends Person {
+public class Buyer extends Person implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -4,13 +4,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class GoodTest {
 
@@ -25,8 +24,7 @@ public class GoodTest {
     public void clean() {
         try (Session session = FACTORY.openSession()) {
             session.beginTransaction();
-            int result = session.createQuery("delete from Good").executeUpdate();
-            System.out.println(result);
+            session.createQuery("delete from Good").executeUpdate();
             session.getTransaction().commit();
         }
     }
@@ -39,7 +37,7 @@ public class GoodTest {
                     .price(120.15)
                     .build();
             Serializable id = session.save(good);
-            assertNotNull(id);
+            Assert.assertNotNull(id);
         }
     }
 
@@ -51,19 +49,25 @@ public class GoodTest {
                     .price(120.15)
                     .build();
             Serializable savedId = session.save(good);
-            assertNotNull(savedId);
+            Assert.assertNotNull(savedId);
+            session.evict(good);
             Good saveGood = session.find(Good.class, savedId);
-            assertNotNull(saveGood);
+            Assert.assertNotNull(saveGood);
         }
     }
 
     @Test
     public void checkGetAll() {
         try (Session session = FACTORY.openSession()) {
+            Good good = Good.builder()
+                    .name("good")
+                    .price(120.15)
+                    .build();
+            session.save(good);
+
             List<Good> list =
                     session.createQuery("select g from Good g", Good.class).list();
-            System.out.println(list.size());
+            Assert.assertEquals(1, list.size());
         }
     }
-
 }

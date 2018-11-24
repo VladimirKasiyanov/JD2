@@ -4,13 +4,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class GoodCategoryTest {
     private static final SessionFactory FACTORY = new Configuration().configure().buildSessionFactory();
@@ -24,8 +23,7 @@ public class GoodCategoryTest {
     public void clean() {
         try (Session session = FACTORY.openSession()) {
             session.beginTransaction();
-            int result = session.createQuery("delete from GoodCategory").executeUpdate();
-            System.out.println(result);
+            session.createQuery("delete from GoodCategory").executeUpdate();
             session.getTransaction().commit();
         }
     }
@@ -37,7 +35,7 @@ public class GoodCategoryTest {
                     .name("category")
                     .build();
             Serializable id = session.save(category);
-            assertNotNull(id);
+            Assert.assertNotNull(id);
         }
     }
 
@@ -48,19 +46,24 @@ public class GoodCategoryTest {
                     .name("category")
                     .build();
             Serializable savedId = session.save(category);
-            assertNotNull(savedId);
+            Assert.assertNotNull(savedId);
+            session.evict(category);
             GoodCategory saveCategory = session.find(GoodCategory.class, savedId);
-            assertNotNull(saveCategory);
+            Assert.assertNotNull(saveCategory);
         }
     }
 
     @Test
     public void checkGetAll() {
         try (Session session = FACTORY.openSession()) {
+            GoodCategory category = GoodCategory.builder()
+                    .name("category")
+                    .build();
+            session.save(category);
+
             List<GoodCategory> list =
                     session.createQuery("select gc from GoodCategory gc", GoodCategory.class).list();
-            System.out.println(list.size());
+            Assert.assertEquals(1, list.size());
         }
     }
-
 }

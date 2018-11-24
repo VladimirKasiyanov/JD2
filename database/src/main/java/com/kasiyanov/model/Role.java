@@ -23,7 +23,7 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "role", schema = "store")
-public class Role {
+public class Role implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
