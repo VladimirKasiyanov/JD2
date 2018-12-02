@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 public class AnOrderTest {
@@ -34,7 +34,7 @@ public class AnOrderTest {
         try (Session session = FACTORY.openSession()) {
             AnOrder anOrder = AnOrder.builder()
                     .number(18)
-                    .date(Instant.now())
+                    .date(LocalDate.now())
                     .price(1287.34)
                     .build();
             Serializable id = session.save(anOrder);
@@ -47,7 +47,7 @@ public class AnOrderTest {
         try (Session session = FACTORY.openSession()) {
             AnOrder anOrder = AnOrder.builder()
                     .number(18)
-                    .date(Instant.now())
+                    .date(LocalDate.now())
                     .price(1287.34)
                     .build();
             Serializable savedId = session.save(anOrder);
@@ -63,7 +63,7 @@ public class AnOrderTest {
         try (Session session = FACTORY.openSession()) {
             AnOrder anOrder = AnOrder.builder()
                     .number(18)
-                    .date(Instant.now())
+                    .date(LocalDate.now())
                     .price(1287.34)
                     .build();
             session.save(anOrder);

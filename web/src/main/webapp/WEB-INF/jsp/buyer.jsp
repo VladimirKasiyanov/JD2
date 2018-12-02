@@ -11,9 +11,9 @@
     <title>Title</title>
 </head>
 <body>
-    <div>
-        <p>Buyer street: </p>
-        <p>${requestScope.buyer.street}</p>
-    </div>
+<div>
+    <p>Buyer street: </p>
+    <p>${requestScope.buyer.street}</p>
+</div>
 </body>
 </html>
