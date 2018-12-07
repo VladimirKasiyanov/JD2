@@ -3,7 +3,10 @@ package com.kasiyanov.servlet;
 import com.kasiyanov.dto.OrdersFilterDto;
 import com.kasiyanov.model.AnOrder;
 import com.kasiyanov.service.AnOrderService;
+import com.kasiyanov.util.ContextRunner;
+import com.kasiyanov.util.LocalDateFormatter;
 import com.kasiyanov.util.StringUtil;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -15,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 @WebServlet("/orders")
 public class AnOrderServlet extends HttpServlet {
@@ -33,16 +35,18 @@ public class AnOrderServlet extends HttpServlet {
             ordersFilter.setPageNumber(Integer.parseInt(req.getParameter("page")));
         }
 
-        List<AnOrder> orders = AnOrderService.getINSTANCE().findAllByFilterNumberDateBuyer(ordersFilter);
-        Long anOrdersQuantity = AnOrderService.getINSTANCE().anOrdersQuantity(ordersFilter);
+        AnnotationConfigApplicationContext context = ContextRunner.getAnnotationContext();
+        AnOrderService anOrderService = context.getBean("anOrderService", AnOrderService.class);
 
+        List<AnOrder> orders = anOrderService.findAllByFilterNumberDateBuyer(ordersFilter);
+        Long anOrdersQuantity = anOrderService.anOrdersQuantity(ordersFilter);
 
         req.setAttribute("orders", orders);
         req.setAttribute("anOrdersQuantity", anOrdersQuantity);
         req.setAttribute("numberOfPages", getQuantityOfPages(ordersFilter, anOrdersQuantity));
         req.getSession().setAttribute("ordersFilter", ordersFilter);
-        req.getSession().setAttribute("orderNumbers", AnOrderService.getINSTANCE().getAllOrderNumbers());
-        req.getSession().setAttribute("orderDates", AnOrderService.getINSTANCE().getAllDates());
+        req.getSession().setAttribute("orderNumbers", anOrderService.getAllOrderNumbers());
+        req.getSession().setAttribute("orderDates", anOrderService.getAllDates());
 
         getServletContext()
                 .getRequestDispatcher("/WEB-INF/jsp/anOrders.jsp")
@@ -62,15 +66,19 @@ public class AnOrderServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         OrdersFilterDto ordersFilter = getOrdersFilter(req);
-        List<AnOrder> orders = AnOrderService.getINSTANCE().findAllByFilterNumberDateBuyer(ordersFilter);
-        Long anOrdersQuantity = AnOrderService.getINSTANCE().anOrdersQuantity(ordersFilter);
+
+        AnnotationConfigApplicationContext context = ContextRunner.getAnnotationContext();
+        AnOrderService anOrderService = context.getBean("anOrderService", AnOrderService.class);
+
+        List<AnOrder> orders = anOrderService.findAllByFilterNumberDateBuyer(ordersFilter);
+        Long anOrdersQuantity = anOrderService.anOrdersQuantity(ordersFilter);
 
         req.setAttribute("orders", orders);
         req.setAttribute("anOrdersQuantity", anOrdersQuantity);
         req.setAttribute("numberOfPages", getQuantityOfPages(ordersFilter, anOrdersQuantity));
         req.getSession().setAttribute("ordersFilter", ordersFilter);
-        req.getSession().setAttribute("orderNumbers", AnOrderService.getINSTANCE().getAllOrderNumbers());
-        req.getSession().setAttribute("orderDates", AnOrderService.getINSTANCE().getAllDates());
+        req.getSession().setAttribute("orderNumbers", anOrderService.getAllOrderNumbers());
+        req.getSession().setAttribute("orderDates", anOrderService.getAllDates());
 
         getServletContext()
                 .getRequestDispatcher("/WEB-INF/jsp/anOrders.jsp")
@@ -82,7 +90,6 @@ public class AnOrderServlet extends HttpServlet {
         String orderDate = req.getParameter("orderDate");
         String maxPrice = req.getParameter("maxPrice");
         String pageLimit = req.getParameter("pageLimit");
-        ;
 
         OrdersFilterDto ordersFilter = OrdersFilterDto.builder()
                 .pageLimit(Integer.parseInt(pageLimit))
@@ -93,7 +100,7 @@ public class AnOrderServlet extends HttpServlet {
             ordersFilter.setOrderNumber(Integer.parseInt(orderNumber));
         }
         if (StringUtil.isNotEmpty(orderDate)) {
-            ordersFilter.setOrderDate(LocalDate.parse(orderDate, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            ordersFilter.setOrderDate(LocalDateFormatter.format(orderDate));
         }
         if (StringUtil.isNotEmpty(maxPrice)) {
             ordersFilter.setMaxPrice(Double.parseDouble(maxPrice));

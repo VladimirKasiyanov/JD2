@@ -1,23 +1,21 @@
 package com.kasiyanov.service;
 
-import com.kasiyanov.dao.BuyerDaoImpl;
 import com.kasiyanov.model.Buyer;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import com.kasiyanov.repository.BuyerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Service
+@Transactional
 public class BuyerService {
 
-    private static final BuyerService INSTANCE = new BuyerService();
+    @Autowired
+    private BuyerRepository buyerRepository;
 
     public Optional<Buyer> getBuyerById(Long id) {
-        return BuyerDaoImpl.getInstance().getBuyerById(id);
+        return buyerRepository.findById(id);
     }
-
-    public static BuyerService getInstance() {
-        return INSTANCE;
-    }
-
 }
