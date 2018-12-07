@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.time.Instant;
@@ -38,7 +39,7 @@ public class AnOrder implements BaseEntity<Long> {
     private Integer number;
 
     @Column(name = "order_date", nullable = false)
-    private Instant date;
+    private LocalDate date;
 
     @Column(name = "price", nullable = false)
     private Double price;
@@ -53,7 +54,7 @@ public class AnOrder implements BaseEntity<Long> {
             inverseJoinColumns = @JoinColumn(name = "good_id"))
     private Set<Good> goods = new HashSet<>();
 
-    public AnOrder(Integer number, Instant date, Double price) {
+    public AnOrder(Integer number, LocalDate date, Double price) {
         this.number = number;
         this.date = date;
         this.price = price;
