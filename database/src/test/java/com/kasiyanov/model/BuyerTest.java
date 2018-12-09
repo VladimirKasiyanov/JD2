@@ -1,3 +1,4 @@
+/*
 package com.kasiyanov.model;
 
 import org.hibernate.Session;
@@ -85,4 +86,4 @@ public class BuyerTest {
             Assert.assertEquals(1, list.size());
         }
     }
-}
+}*/

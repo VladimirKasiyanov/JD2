@@ -1,34 +1,36 @@
 package com.kasiyanov.service;
 
-import com.kasiyanov.dao.AnOrderDaoImpl;
 import com.kasiyanov.dto.OrdersFilterDto;
 import com.kasiyanov.model.AnOrder;
+import com.kasiyanov.repository.AnOrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+@Service
+@Transactional
 public class AnOrderService {
 
-    private static final AnOrderService INSTANCE = new AnOrderService();
+    @Autowired
+    private AnOrderRepository anOrderRepository;
 
     public List<AnOrder> findAllByFilterNumberDateBuyer(OrdersFilterDto ordersFilterDto) {
-        return AnOrderDaoImpl.getINSTANCE().findAllByFilterNumberDateBuyer(ordersFilterDto);
+        return anOrderRepository.findAllByFilterNumberDateBuyer(ordersFilterDto);
     }
 
     public Long anOrdersQuantity(OrdersFilterDto ordersFilterDto) {
-        return AnOrderDaoImpl.getINSTANCE().anOrdersQuantity(ordersFilterDto);
+        return anOrderRepository.anOrdersQuantity(ordersFilterDto);
     }
 
     public Set<Integer> getAllOrderNumbers() {
-        return AnOrderDaoImpl.getINSTANCE().getAllOrderNumbers();
+        return anOrderRepository.findAllOrderNumbers();
     }
 
     public Set<LocalDate> getAllDates() {
-        return AnOrderDaoImpl.getINSTANCE().getAllDates();
-    }
-
-    public static AnOrderService getINSTANCE() {
-        return INSTANCE;
+        return anOrderRepository.findAllDates();
     }
 }
