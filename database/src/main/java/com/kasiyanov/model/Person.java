@@ -3,6 +3,7 @@ package com.kasiyanov.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Data
+@ToString(exclude = "role")
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -42,6 +46,10 @@ public abstract class Person implements BaseEntity<Long> {
 
     @Column(name = "phone", unique = true, nullable = false)
     private String phone;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     public Person(String name, String surename, String login, String password, String email, String phone) {
         this.name = name;

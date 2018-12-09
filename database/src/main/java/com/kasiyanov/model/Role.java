@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@ToString(exclude = "employee")
+@ToString(exclude = "person")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -33,5 +33,5 @@ public class Role implements BaseEntity<Long> {
     private String name;
 
     @OneToMany(mappedBy = "role")
-    Set<Employee> employee = new HashSet<>();
+    Set<Person> person = new HashSet<>();
 }

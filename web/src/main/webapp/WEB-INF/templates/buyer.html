@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Buyer</title>
+</head>
+<body>
+<form th:action="@{/buyer}" th:method="get" th:object="${buyer}">
+    <span th:text="*{id}">id</span><br>
+    <span th:text="*{name}">name</span><br>
+    <span th:text="*{surename}">surename</span><br>
+    <span th:text="*{login}">login</span><br>
+    <span th:text="*{email}">email</span><br>
+    <span th:text="*{phone}">phone</span><br>
+    <span th:text="*{street}">street</span><br>
+    <span th:text="*{house}">house</span><br>
+    <span th:text="*{apartment}">apartment</span><br>
+</form>
+</body>
+</html>

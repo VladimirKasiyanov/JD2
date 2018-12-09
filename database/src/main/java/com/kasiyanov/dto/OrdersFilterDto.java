@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 public class OrdersFilterDto {
 
     private Integer orderNumber;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDate orderDate;
     private Double maxPrice;
     private Integer pageLimit;

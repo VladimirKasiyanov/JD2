@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+</head>
+<body>
+<form th:action="@{/orders}" th:method="post" th:object="${ordersFilter}">
+    <table style="background-color: white; border-radius: 3px">
+        <tr>
+            <td>Номер заказа</td>
+            <td>
+                <select name='orderNumber' id="orderNumber" th:field="*{orderNumber}">
+                    <option th:each="orderNumber : ${orderNumbers}"
+                            th:value="${orderNumber}"
+                            th:text="${orderNumber}">
+                    </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Дата заказа</td>
+            <td>
+                <select id="orderDate" th:field="*{orderDate}">
+                    <option th:each="date : ${orderDates}"
+                            th:value="${date}"
+                            th:text="${date}">
+                    </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Максимальная стоимость</td>
+            <td>
+                <input type="text" th:value="*{maxPrice}" th:field="*{maxPrice}">
+            </td>
+        </tr>
+        <tr>
+            <td>Записей на странице</td>
+            <td>
+                <input type="text" th:value="*{pageLimit}" th:field="*{pageLimit}">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="hidden" name="form" value="filterForm">
+                <input type="submit"
+                       style="background-color: #32CD32; font-size: 15px; border-bottom-color: #32CD32; color: white; border-radius: 3px"
+                       name="form"
+                       value="Фильтр">
+            </td>
+        </tr>
+        <tr>
+            <td>Выбор страницы</td>
+            <td>
+                <span th:each="page : ${numberOfPages}" th:field="*{pageNumber}">
+                    <a th:href="@{/orders(pageNumber=${page})}"
+                       th:text="${page}"></a>
+                </span>
+            </td>
+        </tr>
+    </table>
+</form>
+<br>
+
+
+<table style="border-radius: 15px; background-color: white; width: 100%">
+    <tr>
+        <td style="width: 30%; font-size: 25px" align="center">Номер заказа</td>
+        <td style="width: 40%; font-size: 25px" align="center">Дата заказа</td>
+        <td style="width: 30%; font-size: 25px" align="center">Стоимость</td>
+    </tr>
+    <form th:action="@{/orders}"
+          th:method="post"
+          th:each="order : ${orders}"
+          th:object="${order}">
+        <tr>
+            <td style="width: 30%; font-size: 20px" align="center">
+                <span th:text="*{number}"></span>
+            </td>
+            <td style="width: 40%; font-size: 20px" align="center">
+                <span th:text="*{date}"></span>
+            </td>
+            <td style="width: 30%; font-size: 20px" align="center">
+                <span th:text="*{price}"></span>
+            </td>
+        </tr>
+    </form>
+</table>
+
+
+</body>
+</html>

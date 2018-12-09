@@ -17,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 
 @Data
-@ToString(exclude = "role")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -32,10 +31,6 @@ public class Employee extends Person implements BaseEntity<Long> {
 
     @Column(name = "salary", nullable = false)
     private Double salary;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
 
     public Employee(String name,
                     String surename,
